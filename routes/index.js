@@ -16,58 +16,59 @@ router.post('/stats', function (req, res) {
 
     // Check for cached data
     if (cache[username]) {
-        if(cache[username].time + 60 * 60 * 1000 > Date.now()) {
+        if (cache[username].time + 60 * 60 * 1000 > Date.now()) {
             // Return cached data if it's less than an hour old
-            return res.send(cache[username].data);
+            console.log(`Returning cached data for ${username}`);
+            return res.render('stats', {title: 'Anistats', data: cache[username].data.data});
         }
     }
 
     // language=GraphQL
     let query = `query ($username: String) {
-    User(name: $username) {
-        id
-        name
-        avatar {
-            large
-        }
-        createdAt
-        mediaListOptions {
-            scoreFormat
-        }
-        bannerImage
-        statistics {
-            anime {
-                count
-                meanScore
-                minutesWatched
-                episodesWatched
-                genrePreview: genres(sort: COUNT_DESC){
-                    genre
+        User(name: $username) {
+            id
+            name
+            avatar {
+                medium
+            }
+            createdAt
+            mediaListOptions {
+                scoreFormat
+            }
+            bannerImage
+            statistics {
+                anime {
                     count
                     meanScore
+                    minutesWatched
+                    episodesWatched
+                    genrePreview: genres(sort: COUNT_DESC){
+                        genre
+                        count
+                        meanScore
+                    }
                 }
             }
-        }
-        favourites{
-            anime{
-                edges {
-                    node{
-                        id
-                        type
-                        isAdult
-                        bannerImage
-                        coverImage {
-                            large
-                        }
-                        title{
-                            english
+            favourites{
+                anime{
+                    edges {
+                        node{
+                            id
+                            type
+                            isAdult
+                            bannerImage
+                            coverImage {
+                                large
+                            }
+                            title{
+                                english
+                            }
                         }
                     }
                 }
             }
         }
     }
-}
     `
 
     let variables = {
@@ -75,7 +76,7 @@ router.post('/stats', function (req, res) {
     }
 
 
-    console.log(`Getting stats for ${username}`);
+    console.log(`Fetching new stats for ${username}.`);
     fetch(graphqlUrl, {
         method: 'POST',
         headers: {
@@ -88,10 +89,15 @@ router.post('/stats', function (req, res) {
             }
         )
     }).then(r => r.json()).then(data => {
-        res.send(data);
+        // Cache data
+        cache[username] = {
+            time: Date.now(),
+            data: data
+        }
+
+        console.log(data)
+        return res.render('stats', {title: 'Anistats', data: cache[username].data.data});
     });
-
-
 });
 
 module.exports = router;

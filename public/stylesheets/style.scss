@@ -1,9 +1,24 @@
 body {
   padding: 1em;
 
-  .form-container{
+  .form-container {
     width: 100%;
     max-width: 500px;
     margin: 0 auto;
+  }
+
+  .ID {
+    font-size: 0.8rem !important;
+  }
+
+  .stats-header {
+    background-size: cover;
+    background-position: center center;
+    min-height: 15em;
+
+    .stats-header-container {
+      display: flex;
+      align-items: flex-end;
+    }
   }
 }
