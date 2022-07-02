@@ -9,8 +9,8 @@ router.get('/', function (req, res, next) {
     res.render('index', {title: 'Anistats'});
 });
 
-router.post('/stats', function (req, res) {
-    let username = req.body.username;
+router.get('/stats/:username', function (req, res) {
+    let username = req.params.username;
     if (username.includes("https://anilist.co/user/"))
         username = username.split("https://anilist.co/user/")[1].split("/")[0];
 
