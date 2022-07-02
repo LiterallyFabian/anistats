@@ -89,6 +89,12 @@ router.get('/stats/:username', function (req, res) {
             }
         )
     }).then(r => r.json()).then(data => {
+
+        if (data.errors) {
+            console.log(data.errors);
+            return res.render('error', {title: 'Anistats', data: data.errors[0]});
+        }
+
         // Cache data
         cache[username] = {
             time: Date.now(),
