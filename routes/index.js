@@ -25,108 +25,108 @@ router.get('/stats/:username', function (req, res) {
 
     // language=GraphQL
     let query = `query ($username: String, $type: MediaType) {
-    User(name: $username) {
-        id
-        name
-        avatar {
-            medium
-        }
-        createdAt
-        mediaListOptions {
-            scoreFormat
-        }
-        bannerImage
-        statistics {
-            anime {
-                count
-                meanScore
-                minutesWatched
-                episodesWatched
-                genrePreview: genres(sort: COUNT_DESC){
-                    genre
+        User(name: $username) {
+            id
+            name
+            avatar {
+                medium
+            }
+            createdAt
+            mediaListOptions {
+                scoreFormat
+            }
+            bannerImage
+            statistics {
+                anime {
                     count
                     meanScore
+                    minutesWatched
+                    episodesWatched
+                    genrePreview: genres(sort: COUNT_DESC){
+                        genre
+                        count
+                        meanScore
+                    }
                 }
             }
-        }
-        favourites{
-            anime{
-                edges {
-                    node{
-                        id
-                        type
-                        isAdult
-                        bannerImage
-                        coverImage {
-                            medium
-                            large
-                        }
-                        title{
-                            romaji
-                            english
+            favourites{
+                anime{
+                    edges {
+                        node{
+                            id
+                            type
+                            isAdult
+                            bannerImage
+                            coverImage {
+                                medium
+                                large
+                            }
+                            title{
+                                romaji
+                                english
+                            }
                         }
                     }
                 }
             }
         }
-    }
-    MediaListCollection(userName: $username, type: $type) {
-        lists {
-            name
-            isCustomList
-            isCompletedList: isSplitCompletedList
-            entries {
-                ...mediaListEntry
+        MediaListCollection(userName: $username, type: $type) {
+            lists {
+                name
+                isCustomList
+                isCompletedList: isSplitCompletedList
+                entries {
+                    ...mediaListEntry
+                }
             }
         }
     }
-}
-fragment mediaListEntry on MediaList {
-    mediaId
-    status
-    score
-    progress
-    progressVolumes
-    notes
-    updatedAt
-    startedAt {
-        year
-        month
-        day
-    }
-    completedAt {
-        year
-        month
-        day
-    }
-    media {
-        id
-        title {
-            userPreferred
-            romaji
-            english
-        }
-        coverImage {
-            extraLarge
-            large
-        }
-        type
-        format
-        status(version: 2)
-        episodes
-        averageScore
-        popularity
-        isAdult
-        countryOfOrigin
-        genres
-        bannerImage
-        startDate {
+    fragment mediaListEntry on MediaList {
+        mediaId
+        status
+        score
+        progress
+        progressVolumes
+        notes
+        updatedAt
+        startedAt {
             year
             month
             day
         }
+        completedAt {
+            year
+            month
+            day
+        }
+        media {
+            id
+            title {
+                userPreferred
+                romaji
+                english
+            }
+            coverImage {
+                extraLarge
+                large
+            }
+            type
+            format
+            status(version: 2)
+            episodes
+            averageScore
+            popularity
+            isAdult
+            countryOfOrigin
+            genres
+            bannerImage
+            startDate {
+                year
+                month
+                day
+            }
+        }
     }
-}
     `
 
     let variables = {
@@ -136,34 +136,44 @@ fragment mediaListEntry on MediaList {
 
 
     console.log(`Fetching new stats for ${username}.`);
-    fetch(graphqlUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-                query: query,
-                variables: variables
+    try {
+        fetch(graphqlUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                    query: query,
+                    variables: variables
+                }
+            )
+        }).then(r => r.json()).then(data => {
+
+            if (data.errors) {
+                console.log(data.errors);
+                return res.render('error', {title: 'Anistats', data: data.errors[0]});
             }
-        )
-    }).then(r => r.json()).then(data => {
 
-        if (data.errors) {
-            console.log(data.errors);
-            return res.render('error', {title: 'Anistats', data: data.errors[0]});
-        }
+            // Cache data
+            cache[username] = {
+                time: Date.now(),
+                data: data
+            }
 
-        // Cache data
-        cache[username] = {
-            time: Date.now(),
-            data: data
-        }
-
-        console.log(JSON.stringify(data))
-        console.log(data)
-        return res.render('stats', {title: 'Anistats', data: cache[username].data.data});
-    });
+            console.log(data)
+            return res.render('stats', {title: 'Anistats', data: cache[username].data.data});
+        });
+    } catch (e) {
+        console.log(e);
+        return res.render('error', {
+            title: 'Anistats',
+            data: {
+                message: "An error occurred while fetching data.",
+                status: 500,
+            }
+        });
+    }
 });
 
 module.exports = router;
