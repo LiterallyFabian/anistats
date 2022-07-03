@@ -57,7 +57,7 @@
                                         <h6 class="card-subtitle mb-2 text-muted">Episodes watched</h6>
                                         <p class="card-text">
                                             This is on average
-                                            <b><%= Math.round((data.User.statistics.anime.episodesWatched / data.User.statistics.anime.count) * 100) / 100 %></b>
+                                            <b><%= ((data.User.statistics.anime.episodesWatched / data.User.statistics.anime.count) * 100).toFixed(2) %></b>
                                             episodes per anime.
                                         </p>
                                     </div>
@@ -68,7 +68,7 @@
                                     <div class="card-body">
                                         <h5 class="card-title">
                                             <%=
-                                            data.User.statistics.anime.minutesWatched > 75 ? data.User.statistics.anime.minutesWatched / 60 : data.User.statistics.anime.minutesWatched
+                                            data.User.statistics.anime.minutesWatched > 75 ? (data.User.statistics.anime.minutesWatched / 60).toFixed(2) : data.User.statistics.anime.minutesWatched
                                             %>
                                         </h5>
                                         <h6 class="card-subtitle mb-2 text-muted">
@@ -79,7 +79,7 @@
                                         </h6>
                                         <p class="card-text">
                                             On average, you spent
-                                            <b><%= Math.round(((data.User.statistics.anime.minutesWatched / 60) / data.User.statistics.anime.count) * 100) / 100 %></b>
+                                            <b><%= (((data.User.statistics.anime.minutesWatched / 60) / data.User.statistics.anime.count) * 100).toFixed(2) %></b>
                                             hours per title.
                                         </p>
                                     </div>
