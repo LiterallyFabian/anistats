@@ -2,11 +2,15 @@ const express = require('express');
 const fetch = require('node-fetch');
 const router = express.Router();
 const graphqlUrl = 'https://graphql.anilist.co';
+const fs = require('fs');
 let cache = {};
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    res.render('index', {title: 'Anistats'});
+    res.render('index', {
+        footer: fs.readFileSync('./views/footer.ejs', 'utf8'),
+        title: 'Anistats',
+    });
 });
 
 router.get('/stats/:username', function (req, res) {
@@ -19,7 +23,11 @@ router.get('/stats/:username', function (req, res) {
         if (cache[username].time + 60 * 60 * 1000 > Date.now()) {
             // Return cached data if it's less than an hour old
             console.log(`Returning cached data for ${username}`);
-            return res.render('stats', {title: 'Anistats', data: cache[username].data.data});
+            return res.render('stats', {
+                footer: fs.readFileSync('./views/footer.ejs', 'utf8'),
+                title: 'Anistats',
+                data: cache[username].data.data,
+            });
         }
     }
 
@@ -152,7 +160,11 @@ router.get('/stats/:username', function (req, res) {
 
             if (data.errors) {
                 console.log(data.errors);
-                return res.render('error', {title: 'Anistats', data: data.errors[0]});
+                return res.render('error', {
+                    footer: fs.readFileSync('./views/footer.ejs', 'utf8'),
+                    title: 'Anistats',
+                    data: data.errors[0]
+                });
             }
 
             // Cache data
@@ -162,11 +174,15 @@ router.get('/stats/:username', function (req, res) {
             }
 
             console.log(data)
-            return res.render('stats', {title: 'Anistats', data: cache[username].data.data});
+            return res.render('stats', {
+                footer: fs.readFileSync('./views/footer.ejs', 'utf8'),
+                title: 'Anistats', data: cache[username].data.data
+            });
         });
     } catch (e) {
         console.log(e);
         return res.render('error', {
+            footer: fs.readFileSync('./views/footer.ejs', 'utf8'),
             title: 'Anistats',
             data: {
                 message: "An error occurred while fetching data.",
