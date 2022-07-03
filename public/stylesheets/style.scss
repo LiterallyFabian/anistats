@@ -22,16 +22,16 @@ body {
     }
   }
 
-  .favourite-block {
-    display: block;
+  .row {
+    h3 {
+      text-align: left;
+    }
+  }
 
-    .favourite {
-      background-position: 50%;
-      background-repeat: no-repeat;
-      background-size: cover;
-      border-radius: 4px;
-      width: 85px;
-      height: 115px;
+  .overview-row {
+    .card-title,
+    .card-subtitle {
+      text-align: center;
     }
   }
 }

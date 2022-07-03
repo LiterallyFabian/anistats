@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/2db49cb13f.js" crossorigin="anonymous"></script>
 
     <!-- Meta -->
     <meta name="title" content="<%= data.User.name %>'s Anistats">
@@ -44,8 +45,9 @@
                 </div>
             </div>
             <div class="card-body">
-                <!-- Basic stats row -->
-                <div class="row">
+                <!-- Overview row -->
+                <div class="row overview-row" style="text-align: left">
+                    <h3>Overview</h3>
                     <div class="col-md-12">
                         <div class="row">
                             <!-- Column anime watched -->
@@ -161,19 +163,25 @@
                     </div>
                 </div>
                 <!-- End of basic stats row -->
+                <hr>
                 <!-- Comparison table row -->
                 <div class="row">
-                    <table id="comparison-table">
-                        <thead>
-                        <tr>
-                            <th>Status</th>
-                            <th>Title</th>
-                            <th>Your score</th>
-                            <th>Global score</th>
-                            <th>Diff</th>
-                        </tr>
-                        </thead>
-                    </table>
+                    <h3>You vs others</h3>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <table id="comparison-table">
+                                <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Title</th>
+                                    <th>Your score</th>
+                                    <th>Global score</th>
+                                    <th>Diff</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
 
                     <script>
                         let userData = <%- JSON.stringify(data) %>;
@@ -240,6 +248,19 @@
         </div>
     </div>
 </div>
+
+
 </body>
 
+<footer class="py-3 my-4">
+    <p class="text-center text-muted"><%= title %></p>
+
+    <ul class="nav justify-content-center pb-3 mb-3">
+        <li class="list-inline-item">
+            <a href="https://github.com/LiterallyFabian/anistats">
+                <i class="fab fa-github text-secondary"></i>
+            </a>
+        </li>
+    </ul>
+</footer>
 </html>
