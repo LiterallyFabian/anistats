@@ -1,13 +1,13 @@
-<html>
+<html lang="en">
 
 <head>
     <title><%= title %></title>
 
     <!-- Scripts -->
+    <script src="https://unpkg.com/jquery@3.5.1/dist/jquery.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
             crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/jquery@3.5.1/dist/jquery.js"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
 
     <!-- Stylesheets -->
@@ -44,6 +44,7 @@
                 </div>
             </div>
             <div class="card-body">
+                <!-- Basic stats row -->
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
@@ -114,10 +115,62 @@
                         </div>
                     </div>
                 </div>
+                <!-- End of basic stats row -->
+                <!-- Comparison table row -->
+                <div class="row">
+                    <table id="comparison-table">
+                        <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Title</th>
+                            <th>Your score</th>
+                            <th>Global score</th>
+                            <th>Diff</th>
+                        </tr>
+                        </thead>
+                    </table>
+
+                    <script>
+                        let userData = <%- JSON.stringify(data) %>;
+                        let mediaLists = userData.MediaListCollection.lists;
+                        let mediaEntries = [];
+                        let addedEntries = [];
+
+                        mediaLists.forEach(mediaList => {
+                            mediaList.entries.forEach(entry => {
+
+                                if (entry.score !== 0 && addedEntries.indexOf(entry.mediaId) === -1) {
+                                    let tableEntry = {
+                                        status: entry.status,
+                                        title: entry.media.title.romaji,
+                                        score: entry.score,
+                                        globalScore: entry.media.averageScore / 10,
+                                        diff: entry.score === 0 ? "-" : (entry.score - entry.media.averageScore / 10).toFixed(2)
+                                    };
+
+                                    mediaEntries.push(tableEntry);
+                                    addedEntries.push(entry.mediaId);
+                                }
+                            });
+                        });
+
+                        $('#comparison-table').DataTable({
+                            data: mediaEntries,
+                            order: [[2, "desc"]],
+                            iDisplayLength: 25,
+                            columns: [
+                                {data: 'status'},
+                                {data: 'title'},
+                                {data: 'score'},
+                                {data: 'globalScore'},
+                                {data: 'diff'},
+                            ]
+                        });
+                    </script>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 </body>
 

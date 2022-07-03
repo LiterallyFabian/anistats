@@ -24,57 +24,114 @@ router.get('/stats/:username', function (req, res) {
     }
 
     // language=GraphQL
-    let query = `query ($username: String) {
-        User(name: $username) {
-            id
-            name
-            avatar {
-                medium
-            }
-            createdAt
-            mediaListOptions {
-                scoreFormat
-            }
-            bannerImage
-            statistics {
-                anime {
+    let query = `query ($username: String, $type: MediaType) {
+    User(name: $username) {
+        id
+        name
+        avatar {
+            medium
+        }
+        createdAt
+        mediaListOptions {
+            scoreFormat
+        }
+        bannerImage
+        statistics {
+            anime {
+                count
+                meanScore
+                minutesWatched
+                episodesWatched
+                genrePreview: genres(sort: COUNT_DESC){
+                    genre
                     count
                     meanScore
-                    minutesWatched
-                    episodesWatched
-                    genrePreview: genres(sort: COUNT_DESC){
-                        genre
-                        count
-                        meanScore
-                    }
                 }
             }
-            favourites{
-                anime{
-                    edges {
-                        node{
-                            id
-                            type
-                            isAdult
-                            bannerImage
-                            coverImage {
-                                medium
-                                large
-                            }
-                            title{
-                                romaji
-                                english
-                            }
+        }
+        favourites{
+            anime{
+                edges {
+                    node{
+                        id
+                        type
+                        isAdult
+                        bannerImage
+                        coverImage {
+                            medium
+                            large
+                        }
+                        title{
+                            romaji
+                            english
                         }
                     }
                 }
             }
         }
     }
+    MediaListCollection(userName: $username, type: $type) {
+        lists {
+            name
+            isCustomList
+            isCompletedList: isSplitCompletedList
+            entries {
+                ...mediaListEntry
+            }
+        }
+    }
+}
+fragment mediaListEntry on MediaList {
+    mediaId
+    status
+    score
+    progress
+    progressVolumes
+    notes
+    updatedAt
+    startedAt {
+        year
+        month
+        day
+    }
+    completedAt {
+        year
+        month
+        day
+    }
+    media {
+        id
+        title {
+            userPreferred
+            romaji
+            english
+        }
+        coverImage {
+            extraLarge
+            large
+        }
+        type
+        format
+        status(version: 2)
+        episodes
+        averageScore
+        popularity
+        isAdult
+        countryOfOrigin
+        genres
+        bannerImage
+        startDate {
+            year
+            month
+            day
+        }
+    }
+}
     `
 
     let variables = {
-        username: username
+        username: username,
+        type: 'ANIME'
     }
 
 
@@ -103,6 +160,7 @@ router.get('/stats/:username', function (req, res) {
             data: data
         }
 
+        console.log(JSON.stringify(data))
         console.log(data)
         return res.render('stats', {title: 'Anistats', data: cache[username].data.data});
     });

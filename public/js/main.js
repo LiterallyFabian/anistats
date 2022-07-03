@@ -7,5 +7,4 @@ function redirect() {
 
     // redirect user to /stats/:username
     window.location.href = "/stats/" + username;
-
 }
