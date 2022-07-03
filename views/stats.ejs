@@ -48,6 +48,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
+                            <!-- Column anime watched -->
                             <div class="col-md-3">
                                 <div class="card">
                                     <div class="card-body">
@@ -59,6 +60,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Column episodes watched -->
                             <div class="col-md-3">
                                 <div class="card">
                                     <div class="card-body">
@@ -66,12 +68,13 @@
                                         <h6 class="card-subtitle mb-2 text-muted">Episodes watched</h6>
                                         <p class="card-text">
                                             This is on average
-                                            <b><%= ((data.User.statistics.anime.episodesWatched / data.User.statistics.anime.count) * 100).toFixed(2) %></b>
-                                            episodes per anime.
+                                            <b><%= (data.User.statistics.anime.episodesWatched / data.User.statistics.anime.count).toFixed(2) %></b>
+                                            episodes per anime!
                                         </p>
                                     </div>
                                 </div>
                             </div>
+                            <!-- Column watch time -->
                             <div class="col-md-3">
                                 <div class="card">
                                     <div class="card-body">
@@ -87,13 +90,34 @@
                                             watched
                                         </h6>
                                         <p class="card-text">
+                                            <%
+                                            var hoursToDoThings = {
+                                                5.8: "It would take you <b>5 hours</b> to read 1984 by George Orwell.",
+                                                20.8: "It would take you <b>20 hours</b> to watch Spirited Away ten times.",
+                                                72: "It takes <b>72 hours</b> to fly to the moon.",
+                                                168: "A week is <b>168 hours</b>.",
+                                                350: "It would take <b>350 hours</b> to watch One Piece from start to finish.",
+                                                730: "There are <b>730</b> hours in a month.",
+                                                750: "It takes <b>750 hours</b> to learn Spanish, according to the U.S. Foreign Service Institute.",
+                                                900: "It takes <b>900 hours</b> to learn German, according to the U.S. Foreign Service Institute.",
+                                                1100: "It takes <b>1100 hours</b> to learn Greek, according to the U.S. Foreign Service Institute.",
+                                                2200: "It takes <b>2200 hours</b> to learn Japanese, according to the U.S. Foreign Service Institute.",
+                                                8760: "There are <b>8760 hours</b> in a year. That's a lot of time!",
+                                            }
+
+                                            // Find value closest to users watched time
+                                            var closest = Object.keys(hoursToDoThings).reduce(function (prev, curr) {
+                                                return (Math.abs(curr - data.User.statistics.anime.minutesWatched / 60) < Math.abs(prev - data.User.statistics.anime.minutesWatched / 60) ? curr : prev);
+                                            });
+                                            %>
                                             On average, you spent
                                             <b><%= ((data.User.statistics.anime.minutesWatched / 60) / data.User.statistics.anime.count).toFixed(2) %></b>
-                                            hours per title.
+                                            hours per title. <%- hoursToDoThings[closest] %>
                                         </p>
                                     </div>
                                 </div>
                             </div>
+                            <!-- Column mean score -->
                             <div class="col-md-3">
                                 <div class="card">
                                     <div class="card-body">
@@ -103,10 +127,31 @@
                                         <p class="card-text">
                                             <%
                                             const avg = 65.5;
-                                            let delta = data.User.statistics.anime.meanScore - avg;
-                                            delta = Math.round(delta * 100) / 1000;
+                                            var delta = ((data.User.statistics.anime.meanScore - avg) / 10).toFixed(2);
+                                            var text = "You are ";
+                                            if (delta > 5)
+                                                text += "<b>very generous</b>";
+                                            else if (delta > 3)
+                                                text += "<b>generous</b>";
+                                            else if (delta > 1)
+                                                text += "<b>fairly generous</b>";
+                                            else if (delta > 0.1)
+                                                text += "<b>a little generous</b>";
+                                            else if (delta > -0.1)
+                                                text += "<b>pretty even</b>";
+                                            else if (delta > -1)
+                                                text += "<b>a little stingy</b>";
+                                            else if (delta > -3)
+                                                text += "<b>stingy</b>";
+                                            else if (delta > -5)
+                                                text += "<b>very stingy</b>";
+                                            else
+                                                text += "<b>very stingy</b>";
+
+                                            text += " with your scores.";
                                             %>
-                                            You rate your anime <b><%= delta %></b> points <%= delta > 0 ? "above" : "below" %>
+                                            <%- text %> You rate your anime <b><%= delta %></b>
+                                            points <%= delta > 0 ? "above" : "below" %>
                                             the average user.
                                         </p>
                                     </div>
@@ -165,7 +210,7 @@
                                 if (entry.score !== 0 && addedEntries.indexOf(entry.mediaId) === -1) {
                                     let tableEntry = {
                                         status: entry.status,
-                                        title: entry.media.title.romaji,
+                                        title: entry.media.title.english ? entry.media.title.english : entry.media.title.romaji,
                                         score: tenPointDecimalScore,
                                         globalScore: entry.media.averageScore / 10,
                                         diff: entry.score === 0 ? "-" : (tenPointDecimalScore - entry.media.averageScore / 10).toFixed(2)
