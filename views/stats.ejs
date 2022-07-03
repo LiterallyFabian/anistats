@@ -30,15 +30,86 @@
 
                     <h3 class="text-light"><a
                                 href="https://anilist.co/user/<%= data.User.name %>"><u><b><%= data.User.name %></b></u></a>'s
-                        anime stats <span class="text-secondary ID"><%= data.User.id %></span></h3>
+                        anime stats <span class="text-secondary ID"
+                                          title="<%= data.User.name %>'s Anilist ID"><%= data.User.id %></span></h3>
                     <h6 class="text-secondary ID"></h6>
                 </div>
             </div>
             <div class="card-body">
-
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><%= data.User.statistics.anime.count %></h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Anime watched</h6>
+                                        <p class="card-text">
+                                            This includes dropped and ongoing anime.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><%= data.User.statistics.anime.episodesWatched %></h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Episodes watched</h6>
+                                        <p class="card-text">
+                                            This is on average
+                                            <b><%= Math.round((data.User.statistics.anime.episodesWatched / data.User.statistics.anime.count) * 100) / 100 %></b>
+                                            episodes per anime.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <%=
+                                            data.User.statistics.anime.minutesWatched > 75 ? data.User.statistics.anime.minutesWatched / 60 : data.User.statistics.anime.minutesWatched
+                                            %>
+                                        </h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            <%=
+                                            data.User.statistics.anime.minutesWatched > 75 ? "Hours" : "Minutes"
+                                            %>
+                                            watched
+                                        </h6>
+                                        <p class="card-text">
+                                            On average, you spent
+                                            <b><%= Math.round(((data.User.statistics.anime.minutesWatched / 60) / data.User.statistics.anime.count) * 100) / 100 %></b>
+                                            hours per title.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><%= Math.round((data.User.statistics.anime.meanScore * 10)) / 100 %>
+                                            / 10</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Mean score</h6>
+                                        <p class="card-text">
+                                            <%
+                                            const avg = 65.5;
+                                            let delta = data.User.statistics.anime.meanScore - avg;
+                                            delta = Math.round(delta * 100) / 1000;
+                                            %>
+                                            You rate your anime <b><%= delta %></b> <%= delta > 0 ? "above" : "below" %>
+                                            the average.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 </body>
 

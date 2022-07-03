@@ -58,9 +58,11 @@ router.get('/stats/:username', function (req, res) {
                             isAdult
                             bannerImage
                             coverImage {
+                                medium
                                 large
                             }
                             title{
+                                romaji
                                 english
                             }
                         }
