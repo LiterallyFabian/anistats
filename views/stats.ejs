@@ -106,8 +106,8 @@
                                             let delta = data.User.statistics.anime.meanScore - avg;
                                             delta = Math.round(delta * 100) / 1000;
                                             %>
-                                            You rate your anime <b><%= delta %></b> <%= delta > 0 ? "above" : "below" %>
-                                            the average.
+                                            You rate your anime <b><%= delta %></b> points <%= delta > 0 ? "above" : "below" %>
+                                            the average user.
                                         </p>
                                     </div>
                                 </div>
@@ -138,14 +138,37 @@
 
                         mediaLists.forEach(mediaList => {
                             mediaList.entries.forEach(entry => {
+                                let tenPointDecimalScore;
+                                switch (userData.User.mediaListOptions.scoreFormat) {
+                                    case "POINT_100":
+                                        tenPointDecimalScore = entry.score / 10;
+                                        break;
+                                    case "POINT_10_DECIMAL":
+                                        tenPointDecimalScore = entry.score;
+                                        break;
+                                    case "POINT_10":
+                                        tenPointDecimalScore = entry.score * 1.0;
+                                        break;
+                                    case "POINT_5":
+                                        tenPointDecimalScore = entry.score * 20 - 10; // Source: https://anilist.co/forum/thread/24485/comment/644872
+                                        break;
+                                    case "POINT_3":
+                                        if (entry.score === 3)
+                                            tenPointDecimalScore = 8.5;
+                                        else if (entry.score === 2)
+                                            tenPointDecimalScore = 6.0;
+                                        else
+                                            tenPointDecimalScore = 3.5;
+                                        break;
+                                }
 
                                 if (entry.score !== 0 && addedEntries.indexOf(entry.mediaId) === -1) {
                                     let tableEntry = {
                                         status: entry.status,
                                         title: entry.media.title.romaji,
-                                        score: entry.score,
+                                        score: tenPointDecimalScore,
                                         globalScore: entry.media.averageScore / 10,
-                                        diff: entry.score === 0 ? "-" : (entry.score - entry.media.averageScore / 10).toFixed(2)
+                                        diff: entry.score === 0 ? "-" : (tenPointDecimalScore - entry.media.averageScore / 10).toFixed(2)
                                     };
 
                                     mediaEntries.push(tableEntry);
