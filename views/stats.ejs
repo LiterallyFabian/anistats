@@ -9,6 +9,7 @@
             integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
             crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="/js/main.js"></script>
 
     <!-- Stylesheets -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
@@ -41,11 +42,16 @@
                         anime stats <span class="text-secondary ID"
                                           title="<%= data.User.name %>'s Anilist ID"><%= data.User.id %></span></h3>
                     <h6 class="text-secondary ID"></h6>
+                    <ul class="stats-header-filters">
+                        <li id="li-all">All</li>
+                        <li id="li-overview">Overview</li>
+                        <li onclick="setWindow('compare')" id="li-compare">Compare</li>
+                    </ul>
                 </div>
             </div>
             <div class="card-body">
                 <!-- Overview row -->
-                <div class="row overview-row" style="text-align: left">
+                <div class="row overview-row stats-row" id="row-overview" style="text-align: left">
                     <h3>Overview</h3>
                     <div class="col-md-12">
                         <div class="row">
@@ -162,9 +168,9 @@
                     </div>
                 </div>
                 <!-- End of basic stats row -->
-                <hr>
+
                 <!-- Comparison table row -->
-                <div class="row">
+                <div class="row stats-row" id="row-compare">
                     <h3>You vs others</h3>
                     <div class="col-md-12">
                         <div class="row">
