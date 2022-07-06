@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <title><%= title %> | About</title>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"></script>
+    <script src="/js/main.js"></script>
+
+    <meta name="title" content="Anistats">
+    <meta name="description" content="Generate your statistics for Anilist">
+    <meta name="keywords" content="anilist, anime, stats, statistics, myanimelist">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+</head>
+
+
+<body>
+<div class="container-sm">
+    <h1 class="text-center"><%= title %></h1>
+    <h3>About</h3>
+    <p>Anistats is an open source project that generates statistics for AniList. It acts as an extension for the (really
+        great!) already existing statistics page available on AniList profiles, and is not affiliated with AniList in
+        any
+        way.</p>
+    <p>It is licensed under the <a href="https://github.com/LiterallyFabian/anistats/blob/master/LICENSE">MIT
+            license</a>,
+        and you can find the source code <a href="https://github.com/LiterallyFabian/anistats">here</a>.</p>
+
+    <h3>Acknowledgements</h3>
+    <p>This project is using the following tools and libraries:</p>
+    <ul>
+        <li><a href="https://github.com/AniList/ApiV2-GraphQL-Docs">AniList API v2</a></li>
+        <li><a href="https://nodejs.org/en/">Node.js</a></li>
+        <li><a href="https://www.npmjs.com/">NPM</a></li>
+        <li><a href="https://expressjs.com/">Express</a></li>
+        <li><a href="https://www.jetbrains.com/webstorm/">WebStorm</a></li>
+        <li><a href="https://ejs.co/">EJS</a></li>
+        <li><a href="https://graphql.org/">GraphQL</a></li>
+        <li><a href="https://datatables.net/">DataTables</a></li>
+        <li><a href="https://getbootstrap.com/">Bootstrap</a></li>
+        <li><a href="https://sass-lang.com/">SASS</a></li>
+    </ul>
+
+    <h3 id="privacy">Privacy</h3>
+    <p>This project does not collect any personal data. It only uses the AniList API to generate statistics with public
+        AniList profiles. The content of private AniList profiles is not accessible.</p>
+
+    <h3>Contact</h3>
+    <p>If you have any questions, comments, or suggestions, please contact me <a href="mailto:lindgrenfabian@gmail.com">here</a>.</p>
+</div>
+</body>
+<%- footer %>
+</html>
