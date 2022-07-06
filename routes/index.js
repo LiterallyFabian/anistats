@@ -13,6 +13,13 @@ router.get('/', function (req, res, next) {
     });
 });
 
+router.get('/about', function (req, res, next) {
+    res.render('about', {
+        footer: fs.readFileSync('./views/footer.ejs', 'utf8'),
+        title: 'Anistats',
+    });
+});
+
 router.get('/stats/:username', function (req, res) {
     let username = req.params.username;
     if (username.includes("https://anilist.co/user/"))
