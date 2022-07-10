@@ -32,6 +32,7 @@ body .stats-header .stats-header-filters {
 body .stats-header .stats-header-filters li {
   color: white;
   font-weight: bold;
+  cursor: pointer;
 }
 body .stats-header .stats-header-filters li.active {
   color: #ffc107;
