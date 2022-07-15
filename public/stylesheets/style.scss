@@ -45,16 +45,14 @@ body {
     }
   }
 
-  .row {
-    h3 {
-      text-align: left;
-    }
-  }
-
   .overview-row {
     .card-title,
     .card-subtitle {
       text-align: center;
     }
   }
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

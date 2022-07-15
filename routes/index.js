@@ -30,10 +30,14 @@ router.get('/stats/:username', function (req, res) {
         if (cache[username].time + 60 * 60 * 1000 > Date.now()) {
             // Return cached data if it's less than an hour old
             console.log(`Returning cached data for ${username}`);
+
+            let minutesAgo = Math.round((Date.now() - cache[username].time) / 60000);
+
             return res.render('stats', {
                 footer: fs.readFileSync('./views/footer.ejs', 'utf8'),
                 title: 'Anistats',
                 data: cache[username].data.data,
+                updated: minutesAgo === 0 ? 'just now' : `${minutesAgo} minutes ago`,
             });
         }
     }
@@ -183,7 +187,9 @@ router.get('/stats/:username', function (req, res) {
             console.log(data)
             return res.render('stats', {
                 footer: fs.readFileSync('./views/footer.ejs', 'utf8'),
-                title: 'Anistats', data: cache[username].data.data
+                title: 'Anistats',
+                data: cache[username].data.data,
+                updated: "just now",
             });
         });
     } catch (e) {
@@ -197,6 +203,12 @@ router.get('/stats/:username', function (req, res) {
             }
         });
     }
+});
+
+// POST forceUpdate
+router.post('/forceUpdate', function (req, res) {
+    cache[req.body.username] = null;
+    return res.redirect(`/stats/${req.body.username}`);
 });
 
 module.exports = router;

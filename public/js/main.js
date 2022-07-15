@@ -41,3 +41,20 @@ $(document).ready(function () {
         }
     );
 });
+
+/**
+ * Clears the server cache for a profile and reloads the page, resulting in fresh data
+ * @param username of the profile to reload
+ */
+function forceUpdate(username) {
+    $.ajax({
+        url: "/forceUpdate",
+        type: "POST",
+        data: {
+            username: username
+        },
+        success: function (data) {
+            window.location.reload();
+        }
+    });
+}
